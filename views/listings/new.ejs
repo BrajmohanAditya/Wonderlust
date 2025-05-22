@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Wanderlust</title>
+</head>
+<body>
+    <form method="post" action="/listings"> <!-- yaha jb add karoga toh ya ak post request action route(listings) per send karega jo ki DB meh add hoga -->
+        <input name="listing[title]" placeholder="enter title" type="text"> <br><br>
+        <textarea name="listing[description]" placeholder="enter description" type="text"> </textarea></br><br>
+        <input name="listing[image]" placeholder="enter image URL/Link" type="text"> <br><br>
+        <input name="listing[price]" placeholder="enter price" type="number"> <br><br>
+        <input name="listing[country]" placeholder="enter country" type="text"> <br><br>
+        <input name="listing[location]" placeholder="enter location" type="text"> <br><br>
+        <button>Add</button> <!-- Route No 4 run hoga or DB meh data save ho jayaga -->
+    </form>
+    
+</body>
+</html>
+<!--
+* Yahaan name ka kaam hai server ko batana ki kaunsa input kis field se related hai, taki server sahi tarah se data ko 
+  samajh kar process kar sake 
+-->
