@@ -3,38 +3,39 @@
 <div class="row">
     <div class="col-8 offset-2">
     <h3>Create a New Listing</h3>
-    <form method="post" action="/listings"> <!-- yaha jb add karoga toh ya ak post request action route(listings) per send karega jo ki DB meh add hoga -->
+    <form method="post" action="/listings" novalidate class="needs-validation"> <!-- yaha jb add karoga toh ya ak post request action route(listings) per send karega jo ki DB meh add hoga -->
         <div class="mb-3">
             <label for="title" class="form-lable">Title</label>
-            <input name="listing[title]" placeholder="enter title" type="text" class="form-control">
+            <input name="listing[title]" placeholder="enter title" type="text" class="form-control" required>
+            <!-- <div class="valid-feedback">Title looks good!</div> -->
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-lable">Description</label>
-            <textarea name="listing[description]" placeholder="enter description" class="form-control"> </textarea>
+            <textarea name="listing[description]" placeholder="enter description" class="form-control" required></textarea>
         </div>
 
         <div class="mb-3">
             <label for="image" class="form-lable">Image Link</label>
-            <input name="listing[image]"  placeholder="enter image URl" type="text" class="form-control">
+            <input name="listing[image][url]"  placeholder="enter image URl" type="text" class="form-control" >
         </div>
 
         <div class="row">
         <div class="mb-3 col-md-4">
-            <label for="image" class="form-lable">Price</label>
-            <input name="listing[price]" placeholder="enter price" type="number" class="form-control"> 
+            <label for="price" class="form-lable">Price</label>
+            <input name="listing[price]" placeholder="enter price" type="number" class="form-control" required> 
         </div>
 
         <div class="mb-3 col-md-8">
-            <label for="image" class="form-lable">Country</label>
-            <input name="listing[country]"  placeholder="enter country" type="text" class="form-control"> 
+            <label for="country" class="form-lable">Country</label>
+            <input name="listing[country]"  placeholder="enter country" type="text" class="form-control" required> 
         </div>
         </div>
 
 
         <div class="mb-3">
-            <label for="image" class="form-lable">Location</label>
-            <input name="listing[location]"  placeholder="enter location" type="text" class="form-control"> 
+            <label for="location" class="form-lable">Location</label>
+            <input name="listing[location]"  placeholder="enter location" type="text" class="form-control" required> 
         </div>
         <button class="btn btn-dark">Add</button> <!-- Route No 4 run hoga or DB meh data save ho jayaga -->
         <br><br>

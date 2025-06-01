@@ -98,13 +98,18 @@ app.get("/listings/:id", async(req, res)=>{  // [ Route No: 3]
 
 // Route No: 4   // ya new list add krna ka liya hai 
 app.post("/listings", async(req, res)=>{
-    // let{title, description, image, price, country, location} = req.body; (1st way)
+    let listing = req.body.listing;
+    if (req.body.listing.image && req.body.listing.image.url === "") {
+        req.body.listing.image.url = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80";
+    }
+    // console.log("Incoming request body:", req.body); 
+
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listing");    // entry point per redirect kiya hu 
 });
 // Route no: 5; Edit route
-app.get("/listings/:id/edit", async(req, res)=>{ // 
+app.get("/listings/:id/edit", async(req, res)=>{ //
     let {id} = req.params; 
     const listing = await Listing.findById(id);  // Listing DB meh jo id aya usko search karaga and uska sara detail store kr raha
     res.render("listings/edit.ejs", {listing}); // sara detail eject kr ka show kr raha hai,  "listings/edit.ejs" ya folder ka path hai
@@ -122,6 +127,10 @@ app.delete("/listings/:id", async(req, res)=>{
     let deletedListing = await Listing.findByIdAndDelete(id);
     res.redirect("/listing");
 });
+
+
+
+ 
 
 app.listen(8080, ()=>{
     console.log("Listening to port 8080");

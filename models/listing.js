@@ -63,14 +63,13 @@ const Schema = mongoose.Schema;
 const listingSchema = new Schema({
   title: {
     type: String,
-    required: true,  // fixed from 'require' to 'required'
+    required: true,  
   },
   description: String,
 
   image: {
     filename: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
@@ -81,6 +80,7 @@ const listingSchema = new Schema({
           : v,
     },
   },
+
 
   price: {
     type: Number,
