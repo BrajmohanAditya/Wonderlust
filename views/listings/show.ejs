@@ -1,20 +1,36 @@
-
-<% layout("/layouts/boilerplate") %>  <!--  linked common boilerplate.ejs-->
-<body>
+<% layout("/layouts/boilerplate") %>
+<!--  linked common boilerplate.ejs-->
+<div class="row mt-3">
+  <div class="col-8 offset-2">
     <h3>Listing detail</h3>
-    <ul>
-        <li><%= listing.title%></li>
-        <li><%= listing.description%></li>
-         <li>&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "Price Not Available" %></li>
-        <li><%= listing.location%></li>
-        <li><%= listing.country%></li>
-    </ul>
-    <br>
-    <a href="/listings/<%= listing.id %>/edit">Edit this Listing</a> <!-- [Route No: 5], ko call karaga it is for editing form-->
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-        <button>Delete</button>
-    </form>
-</body>
+    <div class="card col-6 show-card">
+      <img
+        src="<%= listing.image.url %>"
+        class="card-img-top show-img"
+        alt="listing_image"
+      />
+      <div class="card-body">
+        <p class="card-text">
+          <%= listing.title%> <br />
+          <%= listing.description%> <br />
+          &#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") :
+          "Price Not Available" %> <br />
+          <%= listing.location%> <br />
+          <%= listing.country%>
+        </p>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="btns mb-3">
+      <a href="/listings/<%= listing.id %>/edit" class="btn btn-dark col-1 offset-2">Edit</a> <!-- [Route No: 5], ko call karaga it is for editing form-->
+      <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+          <button class="btn btn-dark offset-4">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
 <!--
 sara list index.ejs seh print hua or , or woha further click krna seh jo detail aata hai iska he karan. 
         <li>&#8377;<%= listing.price.toLocaleString("en-IN")%></li> 

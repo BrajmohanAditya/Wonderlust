@@ -1,23 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=\, initial-scale=1.0">
-    <title>Wanderlust</title>
-</head>
-<body>
+<!--  -->
+     <% layout("/layouts/boilerplate") %> 
+<div class="row">
+    <div class="col-8 offset-2">
+    <h3>Create a New Listing</h3>
     <form method="post" action="/listings"> <!-- yaha jb add karoga toh ya ak post request action route(listings) per send karega jo ki DB meh add hoga -->
-        <input name="listing[title]" placeholder="enter title" type="text"> <br><br>
-        <textarea name="listing[description]" placeholder="enter description" type="text"> </textarea></br><br>
-        <input name="listing[image]" placeholder="enter image URL/Link" type="text"> <br><br>
-        <input name="listing[price]" placeholder="enter price" type="number"> <br><br>
-        <input name="listing[country]" placeholder="enter country" type="text"> <br><br>
-        <input name="listing[location]" placeholder="enter location" type="text"> <br><br>
-        <button>Add</button> <!-- Route No 4 run hoga or DB meh data save ho jayaga -->
+        <div class="mb-3">
+            <label for="title" class="form-lable">Title</label>
+            <input name="listing[title]" placeholder="enter title" type="text" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-lable">Description</label>
+            <textarea name="listing[description]" placeholder="enter description" class="form-control"> </textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-lable">Image Link</label>
+            <input name="listing[image]"  placeholder="enter image URl" type="text" class="form-control">
+        </div>
+
+        <div class="row">
+        <div class="mb-3 col-md-4">
+            <label for="image" class="form-lable">Price</label>
+            <input name="listing[price]" placeholder="enter price" type="number" class="form-control"> 
+        </div>
+
+        <div class="mb-3 col-md-8">
+            <label for="image" class="form-lable">Country</label>
+            <input name="listing[country]"  placeholder="enter country" type="text" class="form-control"> 
+        </div>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="image" class="form-lable">Location</label>
+            <input name="listing[location]"  placeholder="enter location" type="text" class="form-control"> 
+        </div>
+        <button class="btn btn-dark">Add</button> <!-- Route No 4 run hoga or DB meh data save ho jayaga -->
+        <br><br>
+
     </form>
-    
-</body>
-</html>
+    </div>
+</div>
+
 <!--
 * Yahaan name ka kaam hai server ko batana ki kaunsa input kis field se related hai, taki server sahi tarah se data ko 
   samajh kar process kar sake 

@@ -1,7 +1,7 @@
 
 <% layout("/layouts/boilerplate") %>  <!--  linked common boiler plate-->
-<body>
-    <h3>All listings</h3>
+
+    <h3 style="margin-left: 2rem;">All listings</h3>
     <!--we are demanding something so get request of action it will give us a page, -->
     <!--Route No: 2 per request send karaga, or wo ak form render karaga new.ejs, we commented out bcg navbar k ander jo addlisting hai woha seh ya kaam ho jaa raha-->
 
@@ -9,18 +9,7 @@
         <button>Create New Listing</button>   
     </form> -->
 
-<!-- <%for(let listing of allListings){%>    
-<div class="card" style="width: 18rem;">
-  <img src="<%=listing.image%>" class="card-img-top" alt="listing_image">
-  <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-  </div>
-</div>
-<%}%>  -->
 
-    <!-- <%for(let listing of allListings){%>
-        <li><a href="/listings/<%= listing._id %>"> <%= listing.title %> </a></li>
-    <%}%>  -->
 
      <!--Route No : 1 seh local host ka through  jb ya page run hoga , toh aha allListing meh sara data aa jayaga
            or uska ander her data set ko listing consider kiya gaya hai. or ush seh uska title and id extract kiya gaya hai 
@@ -29,33 +18,29 @@
            # now when you click here it will triger Route No: 3, 
     
     -->
-<!-- <% for(let listing of allListings) { %>
-  <div class="card" style="width: 18rem; margin: 10px;">
-    <a href="/listings/<%= listing._id %>">
-      <img src="<%= listing.image %>" class="card-img-top" alt="listing_image">
-    <div class="card-body">
-      <p class="card-text">
-        <%= listing.title %> <br>
-        <%= listing.price %>
-      </p>
-    </div>
-    </a>
-  </div>
-<% } %> -->
+<div class="row row-col-lg-3">
 <% for(let listing of allListings) { %>
-  <div class="card" style="width: 18rem; margin: 10px;">
-    <a href="/listings/<%= listing._id %>">
-      <img src="<%= listing.image %>" class="card-img-top" alt="listing image" style="width: 100%; height: auto;">
-    </a>
+  <div class="card" style="width: 18rem;">  
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+      <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 18rem;"/>
+      <div class="card-img-overlay"></div> <!--if you write here something it will visible on card-->
     <div class="card-body">
       <p class="card-text">
-        <%= listing.title %> <br>
+        <b><%= listing.title %></b> <br>
         ₹<%= listing.price %>
       </p>
     </div>
+    </a>
   </div>
 <% } %>
-</body> 
+</div>
+
+ 
+
+
+
+
+
 <!-- 
 * sara list ko print karaya  
 * Post request if we submit something

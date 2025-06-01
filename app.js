@@ -139,4 +139,5 @@ app.listen(8080, ()=>{
 > use whatsapp
 > db.dropDatabase() , Sql query fro droping db
 > wonderlust> db.listings.find(), db ka ander jo listingfile hai usko nikal k dega 
+> app.get: request receive krta hai and kuch serve krta hai, like koi file. 
 */
