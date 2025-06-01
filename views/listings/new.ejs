@@ -44,6 +44,24 @@
     </div>
 </div>
 
+<!-- <script>
+    (() => {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script> -->
+  
+
+
 <!--
 * Yahaan name ka kaam hai server ko batana ki kaunsa input kis field se related hai, taki server sahi tarah se data ko 
   samajh kar process kar sake 
