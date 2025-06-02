@@ -9,44 +9,46 @@
 <div class="row">
     <div class="col-8 offset-2">
     <h3>Edit your Listing</h3>
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT"> 
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation"> 
         <div class="mb-3">
             <label for="title" class="form-lable">Title</label>
-            <input name="listing[title]" class="form-control" value="<%= listing.title %>" type="text"> 
+            <input name="listing[title]" class="form-control" value="<%= listing.title %>" type="text" required> 
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-lable">Description</label>
-            <textarea name="listing[description]" class="form-control"> <%= listing.description %></textarea>
+            <textarea name="listing[description]" class="form-control" required> <%= listing.description %> </textarea>
         </div>
 
         <div class="mb-3">
             <label for="image" class="form-lable">Image</label>
-            <input name="listing[image]" class="form-control" value="<%= listing.image %>" type="text">
+            <input name="listing[image]" class="form-control" value="<%= listing.image %>" type="text" required>
         </div>
 
     <div class="row">
         <div class="mb-3 col-md-4">
             <label for="price" class="form-lable">Price</label>
-            <input name="listing[price]" class="form-control" value="<%= listing.price %>" type="number" required min="1">
+            <input name="listing[price]" class="form-control" value="<%= listing.price %>" type="number" required min="1" required>
         </div>
 
         <div class="mb-3 col-md-8 ">
             <label for="country" class="form-lable">Country</label>
-            <input name="listing[country]" class="form-control" value="<%= listing.country %>" type="text">
+            <input name="listing[country]" class="form-control" value="<%= listing.country %>" type="text" required>
         </div>
     </div>
 
         <div class="mb-3">
             <label for="location" class="form-lable">location</label>
-            <input name="listing[location]" class="form-control" value="<%= listing.location %>" type="text">
+            <input name="listing[location]" class="form-control" value="<%= listing.location %>" type="text" required>
         </div>
      
         <button class="btn btn-dark edit-btn">Edit</button> <br><br>
     </form>
     </div> 
 </div>
-</html>  <!--Route No 5, sara detail ko yaha eject kr raha , jaha title hai woha title jaha value hai woha value
+</html>  
+
+<!--Route No 5, sara detail ko yaha eject kr raha , jaha title hai woha title jaha value hai woha value
  so that you can edit . 
 
  # when we have to update data into data base then we change POST request into PUT request. and we are here to update data. 

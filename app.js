@@ -13,6 +13,8 @@ const Listing = require("./models/listing.js"); // humneh jo .js page banaya hai
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 //  start  data base work 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
@@ -97,17 +99,11 @@ app.get("/listings/:id", async(req, res)=>{  // [ Route No: 3]
 });
 
 // Route No: 4   // ya new list add krna ka liya hai 
-app.post("/listings", async(req, res)=>{
-    let listing = req.body.listing;
-    if (req.body.listing.image && req.body.listing.image.url === "") {
-        req.body.listing.image.url = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80";
-    }
-    // console.log("Incoming request body:", req.body); 
-
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listing");    // entry point per redirect kiya hu 
-});
+app.post("/listings", wrapAsync (async(req, res)=>{
+      const newListing = new Listing(req.body.listing);
+      await newListing.save();
+      res.redirect("/listing"); // entry point per redirect kiya hu
+}));
 // Route no: 5; Edit route
 app.get("/listings/:id/edit", async(req, res)=>{ //
     let {id} = req.params; 
@@ -128,15 +124,25 @@ app.delete("/listings/:id", async(req, res)=>{
     res.redirect("/listing");
 });
 
+// a synchoronus error handlin 
+
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found"));
+});
 
 
- 
+app.use((err, req, res, next) => {
+  let { statusCode, message } = err;
+  statusCode = err.statusCode || 500; // default 500 agar undefined ho toh
+  message = err.message || "Something went wrong beta gee"; // default message agar undefined ho toh
+  res.status(statusCode).send(message);
+});
+
+
 
 app.listen(8080, ()=>{
     console.log("Listening to port 8080");
 });
-
-
 
 
 

@@ -63,7 +63,7 @@ const Schema = mongoose.Schema;
 const listingSchema = new Schema({
   title: {
     type: String,
-    required: true,  
+    required: true,
   },
   description: String,
 
@@ -73,14 +73,14 @@ const listingSchema = new Schema({
     },
     url: {
       type: String,
-      default: "https://unsplash.com/photos/the-sun-shines-through-the-trees-in-the-forest-OC63XpUAxuY",
+      default:
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
       set: (v) =>
-        v === "" 
-          ? "https://unsplash.com/photos/the-sun-shines-through-the-trees-in-the-forest-OC63XpUAxuY"
+        v === ""
+          ? "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
           : v,
     },
   },
-
 
   price: {
     type: Number,
