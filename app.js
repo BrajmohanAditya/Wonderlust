@@ -15,8 +15,22 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-// const {listingSchema} = require("./schema.js");
+const session = require("express-session");
+const flash = require("connect-flash");  
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
+const {listingSchema, reviewSchema} = require("./schema.js");
+const Review = require("./models/review.js");
 //  start  data base work 
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
+
+const user = require("./models/user.js");
+
+
 const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
 
 
@@ -49,95 +63,76 @@ data ko object me badal deta hai, taki hum req.body se usko access kar sakein.
 */
 
 // end 
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public"))); // Serve all static files (HTML, CSS, JS, images) from the public folder in the root of the project.
 
-app.get("/", (req, res)=>{  // it will receive call from local host
-    res.send("Hi, I am root");
+const sessionOptions = {
+  secret: "mysupersecretcode",
+  resave: false,
+  saveUninitialized: true,
+  cookie:{
+    expires: Date.now() + 7*24*60*60*1000,
+    maxAge: 7*24*60*60*1000,
+    httpOnly: true,
+  }
+};
+
+app.get("/", (req, res) => {
+  // it will receive call from local host
+  res.send("Hi, I am root");
 });
 
+app.use(session(sessionOptions));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(user.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-
-//Jab aap /testlisting URL pe visit karte ho, toh ek sample listing (villa in Goa) database me save hoti hai, aur browser me "sucessful testing"
-// app.get("/testlisting", async(req, res)=>{
-    //let sampleListing = new Listing({ ... });
-    // let sampleListing = new Listing({ // Yeh line ek naya object bana raha hai Listing model ka, aur usse sampleListing variable mein store kar raha hai.
-        // title: "My New villa",
-    //     description: "By the beach",
-    //     price:1200,
-    //     location: "goa",
-    //     country:"India"
-    // });
-    // await sampleListing.save(); // jo let kiya usko database meh save karega, or jb tak save na ho wait karega 
-//     console.log("sample was saved");
-//     res.send("sucessful testing");
-// });
-
-
-
-// Route No : 1 
-// app.get("/Listing", async (req, res) => { ... })
-// app.set("view engine", "ejs");,   app.set("views", path.join(__dirname, "views"));  ya dono code define krna hoga tabhi necha wala code chalaga 
-app.get("/listing",wrapAsync(async(req, res) =>{ // ya .find tabhi chalaga, when you start server and call from local host  
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", {allListings});
-}) );// Entry point of this project, call "/Listing" from local host ya DB seh listing meh jo v data hai sb ko layaga or allListing meh store karega 
-
-
-
-app.get("/listings/new", (req, res)=>{  // Route No: 2
-    res.render("listings/new.ejs");
+app.use((req, res, next)=>{
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
 });
 
+// app.get("/demouser", async(req, res)=>{
+//   let fakeUser = new User({
+//     email: "cckumar38ar@gamil.com",
+//     username: "delta_student", 
+//   })
+//   let registeredUser = await User.register(fakeUser, "helloworld");
+//   res.send(registeredUser);
+// })
 
 
-// yaha request,  index.ejs seh k anker tag seh  ayaga, iska liya "url encoded ve import krna para "
-app.get("/listings/:id", wrapAsync(async(req, res)=>{  // [ Route No: 3]
-    let {id} = req.params;                   // req.params se URL ke :id ka value nikala ja raha hai.
-    const listing = await Listing.findById(id);  //  Mongoose ka use karke database me se uss particular listing ko dhoonda ja raha hai jiska _id match kare id se.
-    res.render("listings/show.ejs", {listing});  // show.ejs meh listing ko eject kr ka render karaga
-}));
+
+// jb v "/listings" route per call aya toh ya, const listings = require("./routes/listing.js"); yaha per aa k ./routes/listing.js file meh maping start kr dega 
+app.use("/listings", listingRouter);
+
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
+
+const validateReview = (req, res, next) => {
+    let {error} = reviewSchema.validate(req.body);
+  //   console.log(result);
+  if (error) {
+    throw new ExpressError(400, error);
+  } else {
+    next();
+  }
+};
 
 
-// Route No: 4   // ya new list add krna ka liya hai 
-app.post("/listings", wrapAsync (async(req, res)=>{
-  //   let result = listingSchema.validate(req.body);
-  const newListing = new Listing(req.body.listing);
-  await newListing.save();
-  res.redirect("/listing"); // entry point per redirect kiya hu
-}));
 
-// Route no: 5; Edit route
-app.get("/listings/:id/edit", wrapAsync(async(req, res)=>{ //
-    let {id} = req.params; 
-    const listing = await Listing.findById(id);  // Listing DB meh jo id aya usko search karaga and uska sara detail store kr raha
-    res.render("listings/edit.ejs", {listing}); // sara detail eject kr ka show kr raha hai,  "listings/edit.ejs" ya folder ka path hai
-}))
- // Update route , [Route No: 6 ]
-app.put("/listings/:id", wrapAsync(async(req, res)=>{
-    let {id} = req.params; 
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect("/listing"); //   redirect kiya hai Route No: 3 per 
-}));
 
-// Delete Route, [Route No: 7]
-app.delete("/listings/:id", wrapAsync(async(req, res)=>{
-    let {id} = req.params; 
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    res.redirect("/listing");
-}));
+
 
 // a synchoronus error handlin 
 
-// app.all("*", (req, res, next) => {
-//   next(new ExpressError(404, "Page Not Found"));
-// });
 
-
-// app.all("*", (req, res, next) => {
-//   next(new ExpressError(404, "Page Not Found"));
-// });
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
@@ -145,7 +140,6 @@ app.all(/.*/, (req, res, next) => {
 
 app.use((err, req, res, next) => {
   let { statusCode=500, message="something went wrong" } = err;
-//   res.render("error.ejs", {message});
   res.status(statusCode).send(message);
 });
 
@@ -165,5 +159,7 @@ app.listen(8080, ()=>{
 > use whatsapp
 > db.dropDatabase() , Sql query fro droping db
 > wonderlust> db.listings.find(), db ka ander jo listingfile hai usko nikal k dega 
+> wonderlust> db.reviews.find()
+> wonderlust> db.listings.find({title: "opoppp"})
 > app.get: request receive krta hai and kuch serve krta hai, like koi file. 
 */
