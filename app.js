@@ -95,6 +95,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next)=>{
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currUser = req.user;
   next();
 });
 
@@ -133,15 +134,24 @@ const validateReview = (req, res, next) => {
 // a synchoronus error handlin 
 
 
-
-app.all(/.*/, (req, res, next) => {
+// Instead of app.all("*"), use this safer pattern:
+app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
 
+
+// app.use((err, req, res, next) => {
+//   let { statusCode=500, message="something went wrong" } = err;
+//   res.status(statusCode).send(message);
+// });
+
+
 app.use((err, req, res, next) => {
-  let { statusCode=500, message="something went wrong" } = err;
-  res.status(statusCode).send(message);
+  const { statusCode = 500, message = "Something went wrong" } = err;
+  req.flash("error", message);
+  res.redirect("/listings"); // ya "back", agar tum previous page pe jaana chahte ho
 });
+
 
 
 
@@ -162,4 +172,6 @@ app.listen(8080, ()=>{
 > wonderlust> db.reviews.find()
 > wonderlust> db.listings.find({title: "opoppp"})
 > app.get: request receive krta hai and kuch serve krta hai, like koi file. 
+> wonderlust> show collections
 */
+ 

@@ -19,6 +19,7 @@ async function main(){   // iska kaam hai MongoDB se connection establish karna.
 
 const initDB = async()=>{
     await Listing.deleteMany({});
+   initData.data =  initData.data.map((obj) => ({ ...obj, owner: "68539dd0dc82aca5140f7aba" }));
     await Listing.insertMany(initData.data); // "initData me jo bhi data ho, usko Listing me daal do."
     console.log("data was initialized");
 }
