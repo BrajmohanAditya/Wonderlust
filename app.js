@@ -20,7 +20,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
+ 
 const {listingSchema, reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js");
 //  start  data base work 
@@ -29,11 +29,11 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
 const user = require("./models/user.js");
-
+ 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
 
-
+ 
 main().then(()=>{
     console.log("connected to DB");
 })
@@ -174,4 +174,4 @@ app.listen(8080, ()=>{
 > app.get: request receive krta hai and kuch serve krta hai, like koi file. 
 > wonderlust> show collections
 */
- 
+  

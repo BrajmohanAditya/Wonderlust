@@ -1,23 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const { listingSchema, reviewSchema } = require("../schema.js");
-const ExpressError = require("../utils/ExpressError.js");
+// const { listingSchema, reviewSchema } = require("../schema.js");
+// const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js"); // humneh jo .js page banaya hai uski require kiya hai. 
 // ADD THIS in routes/listing.js
 const Review = require("../models/review.js");
 
-const{isLoggedIn} = require("../middleware.js");
+const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 
-const validateListing = (req, res, next)=>{
-   let {error} = listingSchema.validate(req.body);
-  //   console.log(result);
-  if (error) {
-    throw new ExpressError(400, error);
-  } else {
-    next();
-  }
-};
+
 
 
 
@@ -62,26 +54,32 @@ router.get("/:id", wrapAsync(async(req, res)=>{
   }));
    
   // Route no: 5; Edit route
-  router.get("/:id/edit", isLoggedIn, wrapAsync(async(req, res)=>{ //
+  router.get("/:id/edit", isLoggedIn,isOwner, wrapAsync(async(req, res)=>{ //
       let {id} = req.params; 
       const listing = await Listing.findById(id);  // Listing DB meh jo id aya usko search karaga and uska sara detail store kr raha
       res.render("listings/edit.ejs", {listing}); // sara detail eject kr ka show kr raha hai,  "listings/edit.ejs" ya folder ka path hai
   }))
    // Update route , [Route No: 6 ]
-  router.put("/:id",isLoggedIn, validateListing, wrapAsync(async(req, res)=>{
+  router.put("/:id",isLoggedIn, isOwner, validateListing, wrapAsync(async(req, res)=>{
       let {id} = req.params; 
+
       await Listing.findByIdAndUpdate(id, {...req.body.listing});
       req.flash("success", "Listing updated");
       res.redirect("/listings"); //   redirect kiya hai Route No: 3 per 
   }));  
   
   // Delete Route, [Route No: 7]
-  router.delete("/:id", isLoggedIn, wrapAsync(async(req, res)=>{
-      let {id} = req.params; 
+  router.delete(
+    "/:id",
+    isLoggedIn, 
+    isOwner,
+    wrapAsync(async (req, res) => {
+      let { id } = req.params;
       let deletedListing = await Listing.findByIdAndDelete(id);
       req.flash("success", "New Listing Deleted");
       res.redirect("/listings");
-  }));
+    })
+  );
   
 
   
