@@ -32,7 +32,14 @@ router.get("/new", isLoggedIn, (req, res)=>{  // Route No: 2
 router.get("/:id", wrapAsync(async(req, res)=>{
   // [ Route No: 3]
   let { id } = req.params; // req.params se URL ke :id ka value nikala ja raha hai.
-  const listing = await Listing.findById(id).populate("reviews").populate("owner");
+  const listing = await Listing.findById(id)
+  .populate({
+    path: "reviews",
+    populate:{
+      path: "author",
+    },
+  })
+  .populate("owner");
   if(!listing){
     req.flash("error", "Listing doesnt exist");
     res.redirect("/listings")

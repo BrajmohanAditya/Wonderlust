@@ -16,6 +16,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");  
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -68,7 +69,20 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public"))); // Serve all static files (HTML, CSS, JS, images) from the public folder in the root of the project.
 
+const store = MongoStore.create({
+  mongoUrl: MONGO_URL,
+  crypto: {
+    secret: "mysupersecretcode",
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", ()=>{
+  console.log("Error in session store", err);
+});
+
 const sessionOptions = {
+  store,
   secret: "mysupersecretcode",
   resave: false,
   saveUninitialized: true,
@@ -83,6 +97,9 @@ app.get("/", (req, res) => {
   // it will receive call from local host
   res.send("Hi, I am root");
 });
+
+
+ 
 
 app.use(session(sessionOptions));
 app.use(flash());

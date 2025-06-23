@@ -5,17 +5,19 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Review = require("../models/review.js");
 // const {  reviewSchema } = require("../schema.js");
 const Listing = require("../models/listing.js");
-const{validateReview} = require("../middleware.js")
+const{validateReview, isLoggedIn, isReviewAuthor} = require("../middleware.js")
 
 
 
 // Reviews
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
     listing.reviews.push(newReview); // "Listing ke andar jo 'reviews' naam ka array hai, usme ek naya review (ka ObjectId) daal do."
 
     await newReview.save();
@@ -27,6 +29,8 @@ router.post(
 
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
   wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
