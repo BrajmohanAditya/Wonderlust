@@ -5,6 +5,8 @@ You can think of it like this: app is where you've stored the entire Express app
 All the core functionality of Express — like handling HTTP requests, defining routes, using middleware, and 
 setting up the server — is stored inside the app object.
 */
+require('dotenv').config(); // 👈 .env variables ko load karega
+
 const mongoose = require("mongoose"); //  import Mongoose
 const express = require("express"); // imports the Express library
 const app = express();
@@ -32,9 +34,9 @@ const userRouter = require("./routes/user.js");
 const user = require("./models/user.js");
  
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
-
- 
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
+ const MONGO_URL = process.env.ATLASDB_URL;
+   
 main().then(()=>{
     console.log("connected to DB");
 })
