@@ -96,9 +96,9 @@ const sessionOptions = {
 };
 
 app.get("/", (req, res) => {
-  // it will receive call from local host
-  res.send("Hi, I am root");
+  res.redirect("/listings");
 });
+
 
 
  
