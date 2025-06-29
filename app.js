@@ -34,9 +34,9 @@ const userRouter = require("./routes/user.js");
 const user = require("./models/user.js");
  
 
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
- const MONGO_URL = process.env.ATLASDB_URL;
-   
+const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
+// const MONGO_URL = process.env.ATLASDB_URL;
+
 main().then(()=>{
     console.log("connected to DB");
 })
