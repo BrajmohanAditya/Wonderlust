@@ -14,9 +14,8 @@ const listingController = require("../controllers/listings.js");
 router.get("/", wrapAsync(listingController.index));
 
 // Entry point of this project, call "/Listing" from local host ya DB seh listing meh jo v data hai sb ko layaga or allListing meh store karega
-
-router.get("/new", isLoggedIn, (req, res) => {
-  // Route No: 2
+ // Route No: 2
+router.get("/new", isLoggedIn, (res, req) =>{
   res.render("listings/new.ejs");
 });
 
